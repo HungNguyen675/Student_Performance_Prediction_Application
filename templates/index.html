@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Dự Đoán Điểm Toán</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #3b82f6; --secondary: #10b981; --bg: #0f172a; --surface: rgba(30, 41, 59, 0.7); }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); background-image: radial-gradient(at 0% 0%, #1e1b4b 0, transparent 50%), radial-gradient(at 100% 0%, #064e3b 0, transparent 50%); color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; padding: 20px; }
+        .glass-container { background: var(--surface); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 40px; width: 100%; max-width: 600px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        h1 { text-align: center; font-size: 2rem; background: linear-gradient(to right, #60a5fa, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        label { font-size: 0.9rem; font-weight: 600; color: #cbd5e1; }
+        input { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+        input:focus { border-color: var(--primary); }
+        .submit-btn { width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 15px; font-size: 1.2rem; font-weight: 800; border-radius: 12px; cursor: pointer; transition: transform 0.2s; }
+        .submit-btn:hover { transform: translateY(-3px); }
+        .result-box { background: rgba(16, 185, 129, 0.2); border: 2px solid #10b981; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 30px; }
+        .result-box h2 { margin: 0; color: #34d399; font-size: 1.2rem;}
+        .score { font-size: 3rem; font-weight: 900; color: white; text-shadow: 0 0 15px #10b981; margin-top: 10px;}
+    </style>
+</head>
+<body>
+
+    <div class="glass-container">
+        <h1>🎓 AI Đoán Điểm Toán</h1>
+
+        <!-- Hiện kết quả điểm nếu có -->
+        {% if score is not none %}
+        <div class="result-box">
+            <h2>Dự đoán Điểm thi Cuối Kỳ của bạn:</h2>
+            <div class="score">{{ score }} đ</div>
+        </div>
+        {% endif %}
+
+        <form action="/" method="POST">
+            
+            <div class="input-group">
+                <label>Thời gian tự học (Từ 1 đến 4 mức độ)</label>
+                <!-- Dùng Jinja của Flask để tự điền lại số cũ -->
+                <input type="number" name="studytime" value="{{ request.form.get('studytime', '2') }}" min="1" max="4" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Số buổi nghỉ học (0 - 75 ngày)</label>
+                <input type="number" name="absences" value="{{ request.form.get('absences', '0') }}" min="0" max="75" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Điểm Kiểm Tra Lần 1 (Thang 10)</label>
+                <input type="number" name="Diem_Kiem_Tra_1" step="0.1" value="{{ request.form.get('Diem_Kiem_Tra_1', '7.5') }}" min="0" max="10" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Điểm Kiểm Tra Lần 2 (Thang 10)</label>
+                <input type="number" name="Diem_Kiem_Tra_2" step="0.1" value="{{ request.form.get('Diem_Kiem_Tra_2', '8.0') }}" min="0" max="10" required>
+            </div>
+            
+            <button type="submit" class="submit-btn">Phân tích bằng AI 🧠</button>
+        </form>
+    </div>
+
+</body>
+</html>
