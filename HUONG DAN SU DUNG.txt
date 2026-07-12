@@ -1,0 +1,67 @@
+# HƯỚNG DẪN SỬ DỤNG VÀ CHẠY ỨNG DỤNG ĐỒ ÁN
+**Đề tài:** Dự đoán điểm số và xếp loại học tập của học sinh dựa trên học lực quá khứ và thói quen sinh hoạt.
+
+Kính gửi Thầy, dưới đây là tài liệu hướng dẫn chi tiết về cấu trúc mã nguồn và cách thức khởi chạy ứng dụng đồ án của nhóm chúng em.
+
+---
+
+## 1. Yêu cầu môi trường (Prerequisites)
+Để chấm đồ án và chạy thử ứng dụng trên máy tính cá nhân, Thầy vui lòng đảm bảo máy tính đã cài đặt:
+- **Python (phiên bản >= 3.8)**: Để khởi chạy Backend (FastAPI) và mô hình Trí tuệ Nhân tạo.
+- **Node.js & npm (phiên bản >= 16.x)**: Để khởi chạy giao diện Frontend Web (ReactJS).
+
+---
+
+## 2. Ý nghĩa và cấu trúc thư mục nộp bài
+Trong thư mục nộp bài này, nhóm em đã đóng gói các thành phần cốt lõi:
+- **`main.py`**: Mã nguồn Backend API, làm nhiệm vụ tải mô hình AI và tiếp nhận dữ liệu từ Web do người dùng nhập vào.
+- **`train_model.py`**: Mã nguồn thể hiện quá trình nhóm em xây dựng, tiền xử lý dữ liệu và Huấn luyện (Training) mô hình AI.
+- **`ensemble_model.pkl`**: File mô hình AI đã được huấn luyện hoàn chỉnh bằng thuật toán kết hợp Ensemble (Random Forest, Gradient Boosting, SVR).
+- **`frontend/`**: Thư mục chứa giao diện Web tương tác (được lập trình bằng thư viện ReactJS và Recharts).
+- **`start.bat`**: File script giúp Thầy khởi động nhanh toàn bộ hệ thống bằng 1 cú click chuột.
+- **`requirements.txt`**: Danh sách các thư viện Python dùng trong dự án.
+- *(Lưu ý: Tuân thủ đúng quy định nộp đồ án của bộ môn là "Không nộp Dataset", nên thư mục này sẽ không đính kèm file `student_data.csv`. Mô hình học máy của nhóm em đã được trích xuất thành file `.pkl` nên hệ thống vẫn khởi chạy và dự đoán hoàn toàn bình thường).*
+
+---
+
+## 3. Hướng dẫn Cài đặt & Khởi chạy ứng dụng
+
+### Cách 1: Khởi chạy nhanh bằng Script (Chỉ dành cho hệ điều hành Windows)
+Nhóm em đã viết sẵn một đoạn script để Thầy có thể chạy ứng dụng chấm bài dễ dàng nhất:
+1. Thầy nhấp đúp chuột vào file **`start.bat`** nằm trong thư mục gốc.
+2. Màn hình sẽ xuất hiện 2 cửa sổ Command Prompt. Một cửa sổ sẽ chạy Backend API (cổng 8000) và một cửa sổ chạy Frontend Web (cổng 5173).
+3. Thầy đợi khoảng 15 - 20 giây để hệ thống tự động tải các gói thư viện (`pip` và `npm`) (chỉ mất thời gian ở lần chạy đầu tiên).
+4. Mở trình duyệt Web (Chrome/Edge) và truy cập vào địa chỉ: **http://localhost:5173** để xem giao diện.
+
+### Cách 2: Khởi chạy thủ công bằng dòng lệnh (Terminal)
+Nếu Thầy dùng hệ điều hành khác hoặc muốn chạy thủ công để kiểm tra log hệ thống:
+
+**Bước 1: Chạy mô hình AI (Backend)**
+Thầy mở Terminal tại thư mục gốc của dự án và chạy các lệnh:
+```bash
+pip install -r requirements.txt
+python main.py
+```
+*(Backend sẽ khởi chạy thành công tại http://localhost:8000)*
+
+**Bước 2: Chạy Giao diện Web (Frontend)**
+Thầy mở thêm một Terminal thứ hai, di chuyển vào thư mục `frontend` và chạy:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+*(Giao diện Web Frontend sẽ sẵn sàng tại http://localhost:5173)*
+
+---
+
+## 4. Hướng dẫn thao tác trên Giao diện Web
+1. Thầy truy cập vào trang Web tại địa chỉ `http://localhost:5173`.
+2. Tại phần **Hồ sơ Học sinh**, Thầy có thể nhập thử Mã học sinh và Họ tên *(nhóm em dùng phần này để hiển thị định danh cá nhân trên báo cáo, dữ liệu này sẽ không bị đưa vào mô hình học máy để tránh hiện tượng Overfitting)*.
+3. Nhập giả định các thông tin về **Điểm số quá khứ (G1, G2)** và **Thói quen học tập, Môi trường sống** của học sinh đó.
+4. Bấm nút **Bắt đầu dự đoán**.
+5. Kéo xuống phần **Kết quả Dự đoán từ AI**, Thầy sẽ xem được 4 luồng thông tin:
+   - **Điểm Tổng kết Trung bình Cả năm** (Dự báo số điểm cụ thể học sinh sẽ đạt được).
+   - **Xếp loại Học lực**.
+   - **Độ chính xác (R² Score) và Sai số (RMSE)** của mô hình.
+   - **Biểu đồ Đa giác (Radar Chart)** phân tích trực quan 6 khía cạnh năng lực và lối sống của học sinh, hỗ trợ giáo viên đưa ra góc nhìn tư vấn khách quan nhất.
